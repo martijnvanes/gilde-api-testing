@@ -2,6 +2,7 @@ using Newtonsoft.Json.Linq;
 using NUnit.Framework;
 using RestSharp;
 using System;
+using System.Net;
 
 namespace api_testing
 
@@ -14,7 +15,10 @@ namespace api_testing
             var client = new RestClient("http://acc.polteq-testing.com:8000/wp-json/wp/v2");
             var request = new RestRequest("posts/13");
             var response = client.Get(request);
-            Console.WriteLine(response.Content);
+            var statusCode = response.StatusCode;
+            // Console.WriteLine(response.Content);
+            Assert.AreEqual(HttpStatusCode.OK, statusCode);
+            
 
             // var deserialize = new JsonDeserializer();
             // var output = deserialize.Deserialize<Dictionary<string, string>>(response);
@@ -23,6 +27,7 @@ namespace api_testing
             JObject obs = JObject.Parse(response.Content);
             // Console.WriteLine(obs);
             Assert.That(obs["id"].ToString(), Is.EqualTo("13"), "Id is not correct");
+            Assert.That(obs["_links.self[0].href"].ToString(), Is.EqualTo("http://acc.polteq-testing.com:8000/wp-json/wp/v2/posts/13"), "Link to self is not correct");
         }
 
         [Test]
