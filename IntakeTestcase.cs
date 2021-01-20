@@ -26,6 +26,16 @@ namespace api_testing
         }
 
         [Test]
+        public void ExampleFirstQueryParam()
+        {
+            var client = new RestClient("http://acc.polteq-testing.com:8000/wp-json/wp/v2");
+            var request = new RestRequest("posts")
+            .AddQueryParameter("search", "RestAssured");
+            var response = client.Get(request);
+            Console.WriteLine(response.Content);
+        }
+
+        [Test]
         public void CreateNewPostWithAnonimousBody()
         {
             var client = new RestClient("https://public-api.wordpress.com/rest/v1.1/sites/113768211");
